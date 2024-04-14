@@ -14,15 +14,19 @@ FetchContent_Declare(
 
 # {{{ Include sc-machine
 # TODO: dynamic configuration for sc-machine path based on the ostis-web-platform's variable
-set(SC_MACHINE_PATH "${CMAKE_CURRENT_LIST_DIR}/sc-machine")
+set(SC_MACHINE_PATH "${CMAKE_CURRENT_LIST_DIR}/ostis-web-platform/sc-machine")
 include("${SC_MACHINE_PATH}/CMakeLists.txt")
 # }}} Include sc-machine
 
 # configure tests {{{
 option(OSTIS_UI_BUILD_TESTS "Build ostis-ui tests" ON)
 if(OSTIS_UI_BUILD_TESTS)
-    find_package(GoogleTest CONFIG REQUIRED)
-    include(GoogleTest)
+    find_package(GoogleTest)
+    if(NOT GoogleTest_FOUND)
+        FetchContent_MakeAvailable(googletest)
+    else()
+        include(GoogleTest)
+    endif()
     enable_testing()
 endif()
 # }}} configure tests

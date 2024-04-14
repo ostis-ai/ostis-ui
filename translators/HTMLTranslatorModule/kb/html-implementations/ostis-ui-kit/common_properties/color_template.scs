@@ -1,0 +1,16 @@
+@color_value = _[];;
+
+ostis_ui_color_template =
+[*
+	concept_color _-> _color_class;;
+	_color_class _-> .._ui_element;;
+	_color_class _=> nrel_hex:: @color_value;;
+*];;
+
+templateReplacementsSet
+-> rrel_1:.._ui_element;;
+
+ostis_ui_color_template
+-> rrel_key_sc_element: @color_value;
+=> nrel_replacements_variables: templateReplacementsSet;;
+

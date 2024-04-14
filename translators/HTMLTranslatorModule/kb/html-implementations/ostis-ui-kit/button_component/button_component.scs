@@ -1,0 +1,28 @@
+ostis_ui_kit_html_button
+  <- sc_node_class;
+  <- ostis_ui_button;;
+
+@string_template = [file://button_component.j2];;
+@string_template
+  => nrel_system_identifier: [ostis_ui_kit_html_button_template];
+  => nrel_variable_template: ostis_ui_button_variables;;
+
+// button size variable
+ostis_ui_kit_button_size_large
+  <- sc_node_class;;
+
+ostis_ui_kit_button_size_medium
+  <- sc_node_class;;
+ostis_ui_kit_button_size_small
+  <- sc_node_class;;
+
+ostis_ui_button_variables
+-> ostis_ui_color_variable_node;;
+
+ostis_ui_button_color_variable_node
+-> rrel_variable: [color];
+-> rrel_template: ostis_ui_color_template;;
+
+ostis_ui_button_size_variable_node
+-> rrel_variable: [button_size];
+-> rrel_template: ostis_ui_button_size_template;;
