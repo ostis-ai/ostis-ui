@@ -7,17 +7,11 @@ ostis_ui_kit_html_button
   => nrel_system_identifier: [ostis_ui_kit_html_button_template];
   => nrel_variable_template: ostis_ui_button_variables;;
 
-// button size variable
-ostis_ui_kit_button_size_large
-  <- sc_node_class;;
-
-ostis_ui_kit_button_size_medium
-  <- sc_node_class;;
-ostis_ui_kit_button_size_small
-  <- sc_node_class;;
 
 ostis_ui_button_variables
--> ostis_ui_color_variable_node;;
+-> ostis_ui_color_variable_node;
+-> ostis_ui_kit_button_size_variable_node;
+-> ostis_ui_decomposition_variable_node;;
 
 ostis_ui_button_color_variable_node
 -> rrel_variable: [color];
@@ -25,4 +19,8 @@ ostis_ui_button_color_variable_node
 
 ostis_ui_button_size_variable_node
 -> rrel_variable: [button_size];
--> rrel_template: ostis_ui_button_size_template;;
+-> rrel_template: ostis_ui_kit_button_size_template;;
+
+ostis_ui_button_decomposition_variable_node
+-> rrel_variable: [decomposition];
+-> rrel_template: ostis_ui_decomposition_template;;

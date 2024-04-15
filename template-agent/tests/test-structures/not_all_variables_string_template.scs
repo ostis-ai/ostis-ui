@@ -34,9 +34,9 @@ ostis_ui_color_template =
 
 ostis_ui_color_template
 -> rrel_key_sc_element: @color_value;
-=> nrel_replacements_variables: templateReplacementsSet;;
+=> nrel_replacements_variables: ..templateReplacementSet;;
 
-templateReplacementsSet
+..templateReplacementSet
 -> rrel_1:_ui_element;;
 
 test_action_node

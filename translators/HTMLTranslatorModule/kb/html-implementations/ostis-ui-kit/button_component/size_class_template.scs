@@ -1,0 +1,39 @@
+// button size variable
+
+concept_ostis_ui_kit_button_size
+  <- sc_node_class;;
+
+ostis_ui_kit_button_size_large
+  <- sc_node_class;
+  <- concept_ostis_ui_kit_button_size;
+  => nrel_css_class: [ostis-ui-kit-button-large];;
+
+ostis_ui_kit_button_size_medium
+  <- sc_node_class;
+  <- concept_ostis_ui_kit_button_size;
+  => nrel_css_class: [ostis-ui-kit-button-medium];;
+
+ostis_ui_kit_button_size_small
+  <- sc_node_class;
+  <- concept_ostis_ui_kit_button_size;
+  => nrel_css_class: [ostis-ui-kit-button-small];;
+
+@size_class_value = _[];;
+
+ostis_ui_kit_button_size_template =
+[*
+	ostis_ui_kit_button_size _-> .._button_size;;
+	.._button_size _-> .._ui_element;;
+	.._button_size _=> nrel_css_class:: @size_class_value;;
+*];;
+
+..templateReplacementSet
+-> rrel_1: .._ui_element;;
+
+ostis_ui_kit_button_size_template
+-> rrel_key_sc_element: @size_class_value;
+=> nrel_replacements_variables: ..templateReplacementSet;;
+
+ostis_ui_button_color_variable_node
+-> rrel_variable: [button_size_class];
+-> rrel_template: ostis_ui_kit_button_size_template;;
