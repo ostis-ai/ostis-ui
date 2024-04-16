@@ -1,0 +1,65 @@
+ui_component_text_output
+  <- sc_node_class;
+  <- ui_component;;
+
+ui_component_text_output_font
+  <- sc_node_class;;
+
+ui_component_text_output_style
+  <- sc_node_class;;
+
+ui_component_text_output_style_italic
+  <- sc_node_class;
+  <- ui_component_text_output_style;
+  -> nrel_css_property_representation: [font-style: italic];;
+
+ui_component_text_output_size
+  <- sc_node_class;;
+
+ui_component_text_output_weight
+  <- sc_node_class;;
+
+ui_component_text_output_weight_100
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 100];;
+
+ui_component_text_output_weight_200
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 200];;
+
+ui_component_text_output_weight_300
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 300];;
+
+ui_component_text_output_weight_400
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 400];;
+
+ui_component_text_output_weight_500
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 500];;
+
+ui_component_text_output_weight_600
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 600];;
+
+ui_component_text_output_weight_700
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 700];;
+
+ui_component_text_output_weight_800
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 800];;
+
+ui_component_text_output_weight_900
+  <- sc_node_class;
+  <- ui_component_text_output_weight;
+  -> nrel_css_property_representation: [font-weight: 900];;

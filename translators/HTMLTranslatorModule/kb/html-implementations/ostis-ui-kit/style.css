@@ -26,4 +26,21 @@
     padding-left: 16px;
     padding-right: 16px;
     gap: 8px;
-}   
+}
+
+.ostis-ui-kit-text {
+    display: block;
+    margin: 8px 0;
+}
+
+.ostis-ui-kit-text-small {
+    font-size: 12px;
+}
+
+.ostis-ui-kit-text-medium {
+    font-size: 16px;
+}
+
+.ostis-ui-kit-text-large {
+    font-size: 20px;
+}
