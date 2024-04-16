@@ -14,7 +14,7 @@ FetchContent_Declare(
 
 # {{{ Include sc-machine
 # TODO: dynamic configuration for sc-machine path based on the ostis-web-platform's variable
-set(SC_MACHINE_PATH "${CMAKE_CURRENT_LIST_DIR}/ostis-web-platform/sc-machine")
+set(SC_MACHINE_PATH "${CMAKE_CURRENT_LIST_DIR}/sc-machine")
 include("${SC_MACHINE_PATH}/CMakeLists.txt")
 # }}} Include sc-machine
 
