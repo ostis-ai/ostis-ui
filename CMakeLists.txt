@@ -26,6 +26,9 @@ if(OSTIS_UI_BUILD_TESTS)
     enable_testing()
 endif()
 # }}} configure tests
+
+set(TEMPLATE_AGENT_MODULE_SRC "${CMAKE_CURRENT_LIST_DIR}/template-agent")
+
 add_subdirectory(template-agent)
 add_subdirectory(action-interpreter)
 add_subdirectory(model-generators)

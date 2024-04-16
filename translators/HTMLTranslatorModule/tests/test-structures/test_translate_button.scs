@@ -1,10 +1,98 @@
-test_action_node
-<- question;
-<- action_evaluate_specified_string_template;
--> rrel_1: [new section];;
+@string_template = [<sp-button color="{{ color }}" size="{{ size }}">{{ label }}</sp-button>];;
+@string_template => nrel_system_identifier: [string_template];;
+
+@string_template_expected_result = [<sp-button color="FCBA03" size="large">KNOPKA</sp-button>];;
+@string_template_expected_result => nrel_system_identifier: [string_template_expected_result];;
+
+replacement_values
+-> rrel_1: button;;
 
 button
-<- concept_button (* => nrel_html_template: [<sp-button color="{{ color }}" >label</sp-button>];; *);
-<- color_fcba03 (* <- concept_color;; => nrel_hex: [fcba03];; *);;
+<- concept_button (* => nrel_html_template: @string_template;; *);
+<- color_fcba03;
+<- .size_large;
+=> nrel_decomposition: .button_decomposition (* -> text_field;; *);;
 
-@expected_result = [<sp-button color="fcba03" >label</sp-button>];;
+color_fcba03
+<- concept_color;
+=> nrel_hex: [FCBA03];;
+
+.size_large
+<- concept_size;
+=> nrel_system_identifier: [large];;
+
+text_field
+=> nrel_content: [KNOPKA];
+<- concept_output_text_field;;
+
+@string_template => nrel_variable_template: variablesSetAddr;;
+variablesSetAddr
+-> variableTemplateNode;
+-> variableTemplateNode2;
+-> variableTemplateNode3;;
+
+variableTemplateNode
+-> rrel_variable: [color];
+-> rrel_template: templateAddr;;
+
+@color_value = _[];;
+
+templateAddr =
+[*
+	concept_color _-> _color_class;;
+	_color_class _-> _ui_element;;
+	_color_class _=> nrel_hex:: @color_value;;
+*];;
+
+templateAddr
+-> rrel_key_sc_element: @color_value;
+=> nrel_replacements_variables: templateReplacementsSet;;
+
+templateReplacementsSet
+-> rrel_1: _ui_element;;
+
+variableTemplateNode2
+-> rrel_variable: [size];
+-> rrel_template: templateAddr2;;
+
+@size_value = _[];;
+
+templateAddr2 =
+[*
+	concept_size _-> _size_class;;
+	_size_class _-> _ui_element;;
+	_size_class _=> nrel_system_identifier:: @size_value;;
+*];;
+
+templateAddr2
+-> rrel_key_sc_element: @size_value;
+=> nrel_replacements_variables: templateReplacementsSet2;;
+
+templateReplacementsSet2
+-> rrel_1: _ui_element;;
+
+variableTemplateNode3
+-> rrel_variable: [label];
+-> rrel_template: templateAddr3;;
+
+@label_value = _[];;
+
+templateAddr3 =
+[*
+	_ui_element _=> nrel_decomposition:: _button_decomposition;;
+	_button_decomposition _-> _text_field;;
+	_text_field _=> nrel_content:: @label_value;;
+	_text_field _<- concept_output_text_field;;
+*];;
+
+templateAddr3
+-> rrel_key_sc_element: @label_value;
+=> nrel_replacements_variables: templateReplacementsSet3;;
+
+templateReplacementsSet3
+-> rrel_1: _ui_element;;
+
+test_action_node
+<- action_translate_ui_model_to_html;
+<- question;
+-> rrel_1: button;;

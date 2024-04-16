@@ -1,0 +1,8 @@
+concept_user_interface_component
+=> nrel_inclusion: concept_button;;
+
+sc_node_norole_relation
+-> nrel_html_representation;;
+
+sc_node_class
+-> concept_button;;
