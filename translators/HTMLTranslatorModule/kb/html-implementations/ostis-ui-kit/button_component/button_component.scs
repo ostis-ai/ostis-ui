@@ -21,10 +21,6 @@ ostis_ui_kit_button_color_variable_node
 -> rrel_variable: [color];
 -> rrel_template: ostis_ui_color_template;;
 
-ostis_ui_kit_button_size_variable_node
--> rrel_variable: [button_size];
--> rrel_template: ostis_ui_kit_button_size_template;;
-
 ostis_ui_kit_button_decomposition_variable_node
 -> rrel_variable: [decomposition];
 -> rrel_template: ostis_ui_decomposition_template;;
