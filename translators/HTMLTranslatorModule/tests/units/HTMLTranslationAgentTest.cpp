@@ -24,6 +24,7 @@ using namespace scAgentsCommon;
 
 namespace htmlTranslatorAgentTest
 {
+ScsLoader loader;
 std::string const TEST_FILES_DIR_PATH = HTML_TRANSLATION_AGENT_TEST_SRC_PATH "/test-structures/";
 std::string const PROJECT_REPO_PATH = PROJECT_REPO_PATH_PATH;
 size_t const WAIT_TIME = 1000;
@@ -50,20 +51,23 @@ void TestHTMLTranslatorAgent(ScMemoryContext & context, std::string const & scsT
 {
   InitializeTest();
 
-  ScsLoader loader;
   ScRepoPathCollector collector;
   ScRepoPathCollector::Sources excludeSources;
   ScRepoPathCollector::Sources checkSources;
+  ScRepoPathCollector::Sources buildSources;
   collector.ParseRepoPath(PROJECT_REPO_PATH, excludeSources, checkSources);
+  collector.CollectBuildSources("", excludeSources, checkSources, buildSources);
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + scsTestFileName);
   // load KB sources of the project
-  for (auto const & source : checkSources) {
-    loader.loadScsFile(context, source);}
+  for (std::string const & source : buildSources)
+  {
+    loader.loadScsFile(context, source);
+  }
 
   // Call the agent, get and validate result
-  ScAddr test_action_node = context.HelperFindBySystemIdtf("test_action_node");
-  EXPECT_TRUE(context.IsElement(test_action_node));
-  ScAddr rootUiElement = utils::IteratorUtils::getAnyByOutRelation(&context, test_action_node, CoreKeynodes::rrel_1);
+  ScAddr actionNode = context.HelperFindBySystemIdtf("test_action_node");
+  EXPECT_TRUE(context.IsElement(actionNode));
+  ScAddr rootUiElement = utils::IteratorUtils::getAnyByOutRelation(&context, actionNode, CoreKeynodes::rrel_1);
   EXPECT_TRUE(context.IsElement(rootUiElement));
   ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, HTMLTranslatorKeynodes::action_translate_sc_node_to_html, {rootUiElement}, WAIT_TIME);
   EXPECT_TRUE(context.IsElement(result));
@@ -75,22 +79,22 @@ void TestHTMLTranslatorAgent(ScMemoryContext & context, std::string const & scsT
   EXPECT_NE(resultLinkContent, "");
 
   // Check if the result is correct
-  ScAddr string_template_expected_result = context.HelperFindBySystemIdtf("string_template_expected_result");
-  std::string string_template_expected_result_content;
-  context.GetLinkContent(string_template_expected_result, string_template_expected_result_content);
-  EXPECT_EQ(string_template_expected_result_content, resultLinkContent);
+  ScAddr stringTemplateExpectedResult = utils::IteratorUtils::getAnyByOutRelation(&context, actionNode, context.HelperResolveSystemIdtf("rrel_expected_result"));
+  std::string stringTemplateExpectedResultContent;
+  context.GetLinkContent(stringTemplateExpectedResult, stringTemplateExpectedResultContent);
+  EXPECT_EQ(stringTemplateExpectedResultContent, resultLinkContent);
 
   ShutdownTest();
-}
-
-TEST_F(HTMLTranslatorAgentTest, TranslateButtonDecomposition)
-{
-  TestHTMLTranslatorAgent(*m_ctx, "test_translate_button_decomposition.scs");
 }
 
 TEST_F(HTMLTranslatorAgentTest, TranslateTextOutput)
 {
   TestHTMLTranslatorAgent(*m_ctx, "test_translate_text_output.scs");
+}
+
+TEST_F(HTMLTranslatorAgentTest, TranslateButtonDecomposition)
+{
+  TestHTMLTranslatorAgent(*m_ctx, "test_translate_button_decomposition.scs");
 }
 
 } // namespace htmlTranslatorAgentTest

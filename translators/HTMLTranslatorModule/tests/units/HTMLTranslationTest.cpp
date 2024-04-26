@@ -65,7 +65,7 @@ void TestHTMLTranslator(ScMemoryContext & context, std::string const & scsTestFi
   {
     loader.loadScsFile(context, source);
   }  
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + scsTestFileName);
+
   ScAddr actionNode = context.HelperFindBySystemIdtf("test_action_node");
   ScAddr rootUiElement = utils::IteratorUtils::getAnyByOutRelation(&context, actionNode, scAgentsCommon::CoreKeynodes::rrel_1);
   EXPECT_TRUE(context.IsElement(rootUiElement));
@@ -76,10 +76,10 @@ void TestHTMLTranslator(ScMemoryContext & context, std::string const & scsTestFi
   EXPECT_NE(resultLinkContent, "");
 
   // Check if the result is correct
-  ScAddr string_template_expected_result = utils::IteratorUtils::getAnyByOutRelation(&context, actionNode, context.HelperResolveSystemIdtf("rrel_expected_result"));
-  std::string string_template_expected_result_content;
-  context.GetLinkContent(string_template_expected_result, string_template_expected_result_content);
-  EXPECT_EQ(string_template_expected_result_content, resultLinkContent);
+  ScAddr stringTemplateExpectedResult = utils::IteratorUtils::getAnyByOutRelation(&context, actionNode, context.HelperResolveSystemIdtf("rrel_expected_result"));
+  std::string stringTemplateExpectedResultContent;
+  context.GetLinkContent(stringTemplateExpectedResult, stringTemplateExpectedResultContent);
+  EXPECT_EQ(stringTemplateExpectedResultContent, resultLinkContent);
 
   ShutdownTest();
 }
@@ -91,13 +91,6 @@ TEST_F(HTMLTranslatorTest, TranslateTextOutput)
 
 TEST_F(HTMLTranslatorTest, TranslateDecompositionButton)
 {
-  try
-  {
-    TestHTMLTranslator(*m_ctx, "test_translate_button_decomposition.scs");
-  }
-  catch (utils::ScException const & exception)
-  {
-    SC_LOG_ERROR(exception.Description());
-  }
+  TestHTMLTranslator(*m_ctx, "test_translate_button_decomposition.scs");
 }
 } // namespace htmlTranslatorTest
