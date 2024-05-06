@@ -8,7 +8,7 @@ ostis_ui_color_template =
 *];;
 
 ..templateReplacementSet
--> rrel_1:.._ui_element;;
+-> rrel_1: .._ui_element;;
 
 ostis_ui_color_template
 -> rrel_key_sc_element: @color_value;
