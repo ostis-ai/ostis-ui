@@ -1,0 +1,4 @@
+{# TODO: Do we want to allow the font customization in the UI Kit? #}
+<p class="ostis-ui-text-output {{ font_size_class }}" style='{% if exists("font_weight") %}{{font_weight}}{% endif %}'>
+    {{ text_content }}
+</p>

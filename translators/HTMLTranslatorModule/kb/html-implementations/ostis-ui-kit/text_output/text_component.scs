@@ -1,0 +1,22 @@
+ostis_ui_kit_text_output
+  <- sc_node_class;
+  <- ostis_ui_kit_component;
+  <- ostis_ui_component_implementation;
+  <- ostis_ui_component_html_implementation;;
+
+@string_template = [file://text_component.j2];;
+@string_template
+  => nrel_system_identifier: [ostis_ui_kit_text_output_template];
+  => nrel_variable_template: ostis_ui_kit_text_output_variables;;
+
+ostis_ui_kit_text_output_variables
+-> ostis_ui_kit_text_output_font_weight_variable_node;
+-> ostis_ui_kit_text_output_size_variable_node;;
+
+ostis_ui_kit_text_output_font_weight_variable_node
+-> rrel_variable: [text_weight];
+-> rrel_template: ostis_ui_text_weight_template;;
+
+ostis_ui_kit_text_output_size_variable_node
+-> rrel_variable: [font_size_class];
+-> rrel_template: ostis_ui_kit_text_output_size_template;;

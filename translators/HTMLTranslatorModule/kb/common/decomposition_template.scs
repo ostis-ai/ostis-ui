@@ -1,0 +1,23 @@
+@decomposition_translation_value = _[];;
+
+ostis_ui_decomposition_translation_template =
+[*
+	nrel_decomposition _-> .._decomposition;;
+	.._decomposition _<- .._ui_element;;
+	.._decomposition _=> format_html:: @decomposition_translation_value;;
+*];;
+
+ostis_ui_decomposition_template = [*
+	nrel_decomposition _-> .._decomposition_value;;
+	.._decomposition_value _<- .._ui_element;;
+*];;
+
+..templateReplacementSet
+-> rrel_1: .._ui_element;;
+
+ostis_ui_decomposition_translation_template
+-> rrel_key_sc_element: @decomposition_translation_value;
+=> nrel_replacements_variables: ..templateReplacementSet;
+-> nrel_dependency: nrel_template: ostis_ui_decomposition_template (*
+		-> rrel_key_sc_element: .._decomposition_value;;
+	*);;

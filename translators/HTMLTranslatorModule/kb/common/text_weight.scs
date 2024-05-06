@@ -1,0 +1,15 @@
+@weight_property_value = _[];;
+
+ostis_ui_text_weight_template =
+[*
+	ui_component_text_output_weight _-> .._text_weight;;
+	.._text_weight _-> .._ui_element;;
+	.._text_weight _=> nrel_css_property_representation:: @weight_property_value;;
+*];;
+
+..templateReplacementSet
+-> rrel_1: .._ui_element;;
+
+ostis_ui_text_weight_template
+-> rrel_key_sc_element: @weight_property_value;
+=> nrel_replacements_variables: ..templateReplacementSet;;

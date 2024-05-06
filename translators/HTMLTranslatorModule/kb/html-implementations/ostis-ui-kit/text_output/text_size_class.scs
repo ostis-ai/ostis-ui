@@ -1,0 +1,33 @@
+ostis_ui_kit_text_size
+  <- sc_node_class;;
+
+ostis_ui_kit_text_size_small
+  <- sc_node_class;
+  <- concept_ostis_ui_text_size;
+  => nrel_css_class: [ostis-ui-kit-text-small];;
+
+ostis_ui_kit_text_size_medium
+  <- sc_node_class;
+  <- concept_ostis_ui_text_size;
+  => nrel_css_class: [ostis-ui-kit-text-small];;
+
+ostis_ui_kit_text_size_large
+  <- sc_node_class;
+  <- concept_ostis_ui_text_size;
+  => nrel_css_class: [ostis-ui-kit-text-small];;
+
+@size_class_value = _[];;
+
+ostis_ui_kit_text_size_template =
+[*
+  ostis_ui_kit_text_size _-> .._text_size;;
+  .._text_size _-> .._ui_element;;
+  .._text_size _=> nrel_css_class:: @size_class_value;;
+*];;
+
+..templateReplacementSet
+-> rrel_1: .._ui_element;;
+
+ostis_ui_kit_text_size_template
+-> rrel_key_sc_element: @size_class_value;
+=> nrel_replacements_variables: ..templateReplacementSet;;
