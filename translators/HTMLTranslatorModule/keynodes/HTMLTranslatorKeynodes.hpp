@@ -48,6 +48,9 @@ public:
 
   SC_PROPERTY(Keynode("nrel_format"), ForceCreate(ScType::NodeConstClass))
   static ScAddr nrel_format;
+
+  SC_PROPERTY(Keynode("ostis_ui_current_ui_model"), ForceCreate(ScType::NodeConst))
+  static ScAddr ostis_ui_current_ui_model;
 };
 
 }  // namespace htmlTranslationModule

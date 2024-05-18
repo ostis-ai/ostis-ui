@@ -42,9 +42,9 @@ std::string HTTPRequestHandler::GetFileMimetype(ScMemoryContext *context, ScAddr
       });
 
   if (!context->IsElement(HTTPFormatLink)) {
-    SC_LOG_ERROR("HTTPServer: Requested file mime type is not found.");
+    SC_LOG_ERROR("HTTPRequestHandler: Requested file mime type is not found.");
     SC_THROW_EXCEPTION(utils::ExceptionInvalidType,
-        "HTTPServer: HTTPFormatLink is not found.");
+        "HTTPRequestHandler: HTTPFormatLink is not found.");
   } else {
     // TODO: better variable types depending on the format of the file?
     std::string format;
@@ -57,6 +57,7 @@ void HTTPRequestHandler::FileRetriever(ScMemoryContext * context, ScAddr & fileA
 {
   // file not found
   if (!context->IsElement(fileAddr)) {
+    SC_LOG_ERROR("HTTPRequestHandler: File addr is not valid.");
     res.status = 404;
     return;
   }
@@ -65,6 +66,7 @@ void HTTPRequestHandler::FileRetriever(ScMemoryContext * context, ScAddr & fileA
     std::string fileContent;
     bool const getContentResult = context->GetLinkContent(fileAddr, fileContent);
     if (!getContentResult) {
+      SC_LOG_ERROR("HTTPRequestHandler: File addr is not a file.");
       res.status = 500;
       return;
     }
@@ -74,17 +76,24 @@ void HTTPRequestHandler::FileRetriever(ScMemoryContext * context, ScAddr & fileA
   // Thrown when file mime-type is not found
   catch (utils::ExceptionInvalidType & exception)
   {
+    SC_LOG_ERROR("HTTPRequestHandler: " << exception.Message());
     res.status = 406;
     return;
   }
 }
 
-void HTTPRequestHandler::RetrieveCurrentUIHandler(httplib::Request const & req, httplib::Response & res) noexcept
+void HTTPRequestHandler::RetrieveCurrentUIHandler(httplib::Request const & req, httplib::Response & res)
 {
       // TODO: use user-specific current model
       ScMemoryContext * context = new ScMemoryContext();
-      ScAddr currentModelPointer = context->HelperResolveSystemIdtf("ostis_ui_current_ui_model");
-      ScAddr currentModel = utils::IteratorUtils::getAnyFromSet(context, currentModelPointer);
+
+      ScAddr const currentModel = utils::IteratorUtils::getAnyFromSet(context, HTMLTranslatorKeynodes::ostis_ui_current_ui_model);
+      if (!context->IsElement(currentModel))
+      {
+        res.set_content("Error: current ui model is not found.", "text/html");
+        return;
+      }
+
       ScAddr translationResult =
           utils::AgentUtils::applyActionAndGetResultIfExists(
                 context, HTMLTranslatorKeynodes::action_translate_sc_node_to_html,

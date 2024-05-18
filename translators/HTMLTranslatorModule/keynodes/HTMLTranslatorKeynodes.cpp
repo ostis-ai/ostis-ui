@@ -18,6 +18,7 @@ ScAddr HTMLTranslatorKeynodes::action_evaluate_specified_string_template;
 ScAddr HTMLTranslatorKeynodes::format_html;
 ScAddr HTMLTranslatorKeynodes::servable_content;
 ScAddr HTMLTranslatorKeynodes::nrel_format;
+ScAddr HTMLTranslatorKeynodes::ostis_ui_current_ui_model;
 
 
 }  // namespace htmlTranslationModule
