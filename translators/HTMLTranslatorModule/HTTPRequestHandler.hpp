@@ -3,10 +3,15 @@
 
 namespace htmlTranslationModule {
 
-std::string GetFileMimetype(ScMemoryContext *ctx, ScAddr scFile);
-void RetrieveCurrentUIHandler(ScMemoryContext *ctx ,const httplib::Request& req, httplib::Response& res) noexcept;
-void FileBySystemIdtfRequestHandler(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept;
-void FileByAddrRequestHandler(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept;
-void FileRetriever(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept;
+class HTTPRequestHandler
+{
+public:
+  static ScAddr ConvertToScAddr(std::string const & str);
+  static std::string GetFileMimetype(ScMemoryContext * context, ScAddr const & scFile);
+  static void RetrieveCurrentUIHandler(httplib::Request const & req, httplib::Response & res) noexcept;
+  static void FileBySystemIdtfRequestHandler(httplib::Request const & req, httplib::Response & res) noexcept;
+  static void FileByAddrRequestHandler(const httplib::Request& req, httplib::Response& res) noexcept;
+  static void FileRetriever(ScMemoryContext * context, ScAddr & fileAddr, httplib::Request const & req, httplib::Response & res) noexcept;
+};
 
 }

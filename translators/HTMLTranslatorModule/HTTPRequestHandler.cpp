@@ -4,16 +4,17 @@
 #include "sc-memory/sc_memory.hpp"
 #include <HTTPRequestHandler.hpp>
 
-namespace htmlTranslationModule {
+namespace htmlTranslationModule
+{
 
-ScAddr ConvertToScAddr(const std::string str) {
+ScAddr HTTPRequestHandler::ConvertToScAddr(std::string const & str) {
     ScAddr::HashType value;
     std::istringstream iss(str);
     iss >> value;
     return ScAddr(value);
 }
 
-std::string GetFileMimetype(ScMemoryContext *ctx, ScAddr scFile) {
+std::string HTTPRequestHandler::GetFileMimetype(ScMemoryContext *context, ScAddr const & scFile) {
   std::string fileContent;
 
   ScAddr HTTPFormatLink;
@@ -32,7 +33,7 @@ std::string GetFileMimetype(ScMemoryContext *ctx, ScAddr scFile) {
       ScType::LinkVar >> FileFormatLinkAlias, ScType::EdgeAccessVarPosPerm,
       HTMLTranslatorKeynodes::nrel_mimetype);
 
-  ctx->HelperSmartSearchTemplate(
+  context->HelperSmartSearchTemplate(
       FileFormatHTTPDescription,
       [&FileFormatLinkAlias, &HTTPFormatLink](
           ScTemplateSearchResultItem const &item) -> ScTemplateSearchRequest {
@@ -40,72 +41,69 @@ std::string GetFileMimetype(ScMemoryContext *ctx, ScAddr scFile) {
         return ScTemplateSearchRequest::STOP;
       });
 
-  if (!ctx->IsElement(HTTPFormatLink)) {
+  if (!context->IsElement(HTTPFormatLink)) {
     SC_LOG_ERROR("HTTPServer: Requested file mime type is not found.");
     SC_THROW_EXCEPTION(utils::ExceptionInvalidType,
         "HTTPServer: HTTPFormatLink is not found.");
   } else {
     // TODO: better variable types depending on the format of the file?
     std::string format;
-    ctx->GetLinkContent(HTTPFormatLink, format);
+    context->GetLinkContent(HTTPFormatLink, format);
     return format;
   }
 }
 
-void FileRetriever(ScMemoryContext *ctx, ScAddr& fileAddr, const httplib::Request& req, httplib::Response& res) noexcept {
+void HTTPRequestHandler::FileRetriever(ScMemoryContext * context, ScAddr & fileAddr, httplib::Request const & req, httplib::Response & res) noexcept
+{
   // file not found
-  if (!ctx->IsElement(fileAddr)) {
+  if (!context->IsElement(fileAddr)) {
     res.status = 404;
     return;
   }
-  if (ctx->GetElementType(fileAddr) == ScType::LinkConst) {
-    try {
-      std::string fileContent;
-      const bool getContentResult = ctx->GetLinkContent(fileAddr, fileContent);
-      if (!getContentResult) {
-        res.status = 500;
-        return;
-      }
-      std::string format = GetFileMimetype(ctx, fileAddr);
-      res.set_content(fileContent, format);
-    }
-    // Thrown when file mime-type is not found
-    catch (utils::ExceptionInvalidType& e) {
-      res.status = 406;
+
+  try {
+    std::string fileContent;
+    bool const getContentResult = context->GetLinkContent(fileAddr, fileContent);
+    if (!getContentResult) {
+      res.status = 500;
       return;
     }
+    std::string format = GetFileMimetype(context, fileAddr);
+    res.set_content(fileContent, format);
   }
-  else {
-    // unsupported media type since we can only return links, not nodes or edges
-    res.status = 415;
+  // Thrown when file mime-type is not found
+  catch (utils::ExceptionInvalidType & exception)
+  {
+    res.status = 406;
     return;
   }
 }
 
-void RetrieveCurrentUIHandler(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept {
+void HTTPRequestHandler::RetrieveCurrentUIHandler(httplib::Request const & req, httplib::Response & res) noexcept
+{
       // TODO: use user-specific current model
-      ScAddr currentModelPointer = ctx->HelperResolveSystemIdtf("ostis_ui_current_ui_model");
-      ScAddr currentModel = utils::IteratorUtils::getAnyFromSet(ctx, currentModelPointer);
+      ScMemoryContext * context = new ScMemoryContext();
+      ScAddr currentModelPointer = context->HelperResolveSystemIdtf("ostis_ui_current_ui_model");
+      ScAddr currentModel = utils::IteratorUtils::getAnyFromSet(context, currentModelPointer);
       ScAddr translationResult =
           utils::AgentUtils::applyActionAndGetResultIfExists(
-              ctx, HTMLTranslatorKeynodes::action_translate_sc_node_to_html,
+                context, HTMLTranslatorKeynodes::action_translate_sc_node_to_html,
               {currentModel}, 1000);
-      ScAddr translationResultLink = utils::IteratorUtils::getAnyFromSet(ctx, translationResult);
-      if (!ctx->IsElement(translationResultLink)) {
+      ScAddr translationResultLink = utils::IteratorUtils::getAnyFromSet(context, translationResult);
+      if (!context->IsElement(translationResultLink)) {
         res.set_content("Error: translation result is invalid.", "text/html");
       } 
       else {
         std::string result;
-        ctx->GetLinkContent(translationResultLink, result);
+        context->GetLinkContent(translationResultLink, result);
         // TODO: should we retrieve the link format rather than hardcode it?
         // current solution is more performant
         res.set_content(result, "text/html");
       }
 }
 
-
-
-void FileByAddrRequestHandler(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept {
+void HTTPRequestHandler::FileByAddrRequestHandler(const httplib::Request& req, httplib::Response& res) noexcept {
+  ScMemoryContext * context = new ScMemoryContext();
   ScAddr fileAddr;
   if (!req.has_param("addr")) {
     res.status = 400;
@@ -113,10 +111,11 @@ void FileByAddrRequestHandler(ScMemoryContext *ctx, const httplib::Request& req,
   }
   const std::string addr = req.path_params.at("addr");
   fileAddr = ConvertToScAddr(addr);
-  FileRetriever(ctx, req, res);
+  FileRetriever(context, fileAddr, req, res);
 }
 
-void FileBySystemIdtfRequestHandler(ScMemoryContext *ctx, const httplib::Request& req, httplib::Response& res) noexcept {
+void HTTPRequestHandler::FileBySystemIdtfRequestHandler(const httplib::Request& req, httplib::Response& res) noexcept {
+  ScMemoryContext * context = new ScMemoryContext();
   ScAddr fileAddr;
   if (!req.has_param("system_idtf")) {
     res.status = 400;
@@ -124,12 +123,12 @@ void FileBySystemIdtfRequestHandler(ScMemoryContext *ctx, const httplib::Request
   }
   const std::string system_idtf = req.path_params.at("system_idtf");
   try {
-      fileAddr = ctx->HelperResolveSystemIdtf(system_idtf);
+      fileAddr = context->HelperResolveSystemIdtf(system_idtf);
     } 
   catch (utils::ExceptionInvalidParams &e) {
       res.status = 404;
   }
-  FileRetriever(ctx, req, res);
+  FileRetriever(context, fileAddr, req, res);
 }
 
-}
+} // htmlTranslationModule

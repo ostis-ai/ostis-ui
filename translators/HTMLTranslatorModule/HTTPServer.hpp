@@ -5,28 +5,22 @@
 
 namespace htmlTranslationModule {
 
-
-
-class ServerWrapper {
-
+class ServerWrapper
+{
 public:
-  ServerWrapper() : server_thread(), server(), mtx(), running_(false) {}
+  ServerWrapper() = default;
 
-  ~ServerWrapper();
+  ~ServerWrapper() = default;
+
+  void Run();
 
   void StartServer();
 
   void StopServer();
 
-  ScAddr ConvertToScAddr(const std::string str);
-
-  void JoinServerThread();
-
-private:
-    std::thread server_thread;
-    httplib::Server server;
-    std::mutex mtx;
-    ScMemoryContext ctx;
-    bool running_ = false;
+protected:
+    std::thread m_serverThread;
+    httplib::Server m_server;
+    std::atomic<sc_bool> m_isRunning;
  };
 }

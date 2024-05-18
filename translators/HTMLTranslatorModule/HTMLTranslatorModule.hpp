@@ -9,6 +9,8 @@
 #include "sc-memory/sc_memory.hpp"
 #include "sc-memory/sc_module.hpp"
 
+#include "HTTPServer.hpp"
+
 #include "generated/HTMLTranslatorModule.generated.hpp"
 
 class HTMLTranslatorModule : public ScModule
@@ -19,4 +21,7 @@ class HTMLTranslatorModule : public ScModule
   virtual sc_result InitializeImpl() override;
 
   virtual sc_result ShutdownImpl() override;
+
+public:
+  std::unique_ptr<htmlTranslationModule::ServerWrapper> m_server;
 };
