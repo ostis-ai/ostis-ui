@@ -112,6 +112,7 @@ void HTTPRequestHandler::RetrieveCurrentUIHandler(httplib::Request const & req, 
 }
 
 void HTTPRequestHandler::FileByAddrRequestHandler(const httplib::Request& req, httplib::Response& res) noexcept {
+  //TODO: use user-specific context
   ScMemoryContext * context = new ScMemoryContext();
   ScAddr fileAddr;
   if (!req.has_param("addr")) {
