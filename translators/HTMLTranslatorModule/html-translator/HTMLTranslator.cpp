@@ -166,13 +166,8 @@ ScAddr HTMLTranslator::GetAnswerLink(
   context.SetLinkContent(linkWithHTMLRepresentation, componentTemplateString);
 
   // Generating html representation
-<<<<<<< HEAD
-  // ScAddr arcAddr = context.GenerateConnector(ScType::ConstCommonArc, uiComponent, linkWithHTMLRepresentation);
-  // context.GenerateConnector(ScType::PermPosArc, HTMLTranslatorKeynodes::nrel_html_representation, arcAddr);
-=======
   ScAddr arcAddr = context.GenerateConnector(ScType::ConstCommonArc, uiComponent, linkWithHTMLRepresentation);
   context.GenerateConnector(ScType::ConstPermPosArc, HTMLTranslatorKeynodes::nrel_html_representation, arcAddr);
->>>>>>> branch_for_merge
 
   if (!context.IsElement(linkWithHTMLRepresentation))
   {

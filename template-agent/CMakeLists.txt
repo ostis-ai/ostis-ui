@@ -25,7 +25,7 @@ target_include_directories(ostis-specified-template-agent
     PUBLIC ${CMAKE_CURRENT_LIST_DIR}
 )
 
-find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(inja REQUIRED)
 
 target_link_libraries(ostis-specified-template-agent
